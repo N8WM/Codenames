@@ -1,0 +1,199 @@
+{
+    "game_name": "human",
+    "codemaster": "HumanCodemaster",
+    "guesser": "HumanGuesser",
+    "seed": 0,
+    "words": [
+        {
+            "word": "SINK",
+            "color": "Civilian",
+            "guessed": false
+        },
+        {
+            "word": "POOL",
+            "color": "Civilian",
+            "guessed": false
+        },
+        {
+            "word": "KNIFE",
+            "color": "Assassin",
+            "guessed": false
+        },
+        {
+            "word": "ALPS",
+            "color": "Blue",
+            "guessed": false
+        },
+        {
+            "word": "CONTRACT",
+            "color": "Civilian",
+            "guessed": false
+        },
+        {
+            "word": "CAR",
+            "color": "Blue",
+            "guessed": false
+        },
+        {
+            "word": "PLATE",
+            "color": "Red",
+            "guessed": true
+        },
+        {
+            "word": "TRUNK",
+            "color": "Red",
+            "guessed": true
+        },
+        {
+            "word": "WORM",
+            "color": "Blue",
+            "guessed": false
+        },
+        {
+            "word": "RULER",
+            "color": "Blue",
+            "guessed": true
+        },
+        {
+            "word": "BELT",
+            "color": "Blue",
+            "guessed": false
+        },
+        {
+            "word": "CHINA",
+            "color": "Red",
+            "guessed": true
+        },
+        {
+            "word": "PARACHUTE",
+            "color": "Blue",
+            "guessed": false
+        },
+        {
+            "word": "FIGHTER",
+            "color": "Civilian",
+            "guessed": false
+        },
+        {
+            "word": "SPELL",
+            "color": "Red",
+            "guessed": true
+        },
+        {
+            "word": "PRESS",
+            "color": "Red",
+            "guessed": true
+        },
+        {
+            "word": "LION",
+            "color": "Red",
+            "guessed": true
+        },
+        {
+            "word": "JAM",
+            "color": "Civilian",
+            "guessed": true
+        },
+        {
+            "word": "MAPLE",
+            "color": "Civilian",
+            "guessed": false
+        },
+        {
+            "word": "BEACH",
+            "color": "Red",
+            "guessed": true
+        },
+        {
+            "word": "CHICK",
+            "color": "Civilian",
+            "guessed": false
+        },
+        {
+            "word": "MOUTH",
+            "color": "Blue",
+            "guessed": false
+        },
+        {
+            "word": "EMBASSY",
+            "color": "Civilian",
+            "guessed": false
+        },
+        {
+            "word": "LEMON",
+            "color": "Civilian",
+            "guessed": false
+        },
+        {
+            "word": "SCHOOL",
+            "color": "Red",
+            "guessed": true
+        }
+    ],
+    "turns": [
+        {
+            "clue": "bowl",
+            "clue_num": 2,
+            "guesses": [
+                {
+                    "guess": "plate",
+                    "guess_index": 6
+                },
+                {
+                    "guess": "china",
+                    "guess_index": 11
+                },
+                {
+                    "guess": "jam",
+                    "guess_index": 17
+                }
+            ]
+        },
+        {
+            "clue": "learn",
+            "clue_num": 2,
+            "guesses": [
+                {
+                    "guess": "school",
+                    "guess_index": 24
+                },
+                {
+                    "guess": "ruler",
+                    "guess_index": 9
+                }
+            ]
+        },
+        {
+            "clue": "button",
+            "clue_num": 2,
+            "guesses": [
+                {
+                    "guess": "spell",
+                    "guess_index": 14
+                },
+                {
+                    "guess": "trunk",
+                    "guess_index": 7
+                },
+                {
+                    "guess": "press",
+                    "guess_index": 15
+                }
+            ]
+        },
+        {
+            "clue": "madagascar",
+            "clue_num": 1,
+            "guesses": [
+                {
+                    "guess": "lion",
+                    "guess_index": 16
+                },
+                {
+                    "guess": "beach",
+                    "guess_index": 19
+                }
+            ]
+        }
+    ]
+}
