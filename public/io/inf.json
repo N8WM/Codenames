@@ -17,7 +17,7 @@
         {
             "word": "KNIFE",
             "color": "Assassin",
-            "guessed": false
+            "guessed": true
         },
         {
             "word": "ALPS",
@@ -37,7 +37,7 @@
         {
             "word": "PLATE",
             "color": "Red",
-            "guessed": false
+            "guessed": true
         },
         {
             "word": "TRUNK",
@@ -52,7 +52,7 @@
         {
             "word": "RULER",
             "color": "Blue",
-            "guessed": false
+            "guessed": true
         },
         {
             "word": "BELT",
@@ -77,22 +77,22 @@
         {
             "word": "SPELL",
             "color": "Red",
-            "guessed": false
+            "guessed": true
         },
         {
             "word": "PRESS",
             "color": "Red",
-            "guessed": false
+            "guessed": true
         },
         {
             "word": "LION",
             "color": "Red",
-            "guessed": false
+            "guessed": true
         },
         {
             "word": "JAM",
             "color": "Civilian",
-            "guessed": false
+            "guessed": true
         },
         {
             "word": "MAPLE",
@@ -102,7 +102,7 @@
         {
             "word": "BEACH",
             "color": "Red",
-            "guessed": false
+            "guessed": true
         },
         {
             "word": "CHICK",
@@ -127,7 +127,7 @@
         {
             "word": "SCHOOL",
             "color": "Red",
-            "guessed": false
+            "guessed": true
         }
     ],
     "turns": [
@@ -136,8 +136,62 @@
             "clue_num": 2,
             "guesses": [
                 {
-                    "guess": "China",
+                    "guess": "plate",
+                    "guess_index": 6
+                },
+                {
+                    "guess": "china",
                     "guess_index": 11
+                },
+                {
+                    "guess": "jam",
+                    "guess_index": 17
+                }
+            ]
+        },
+        {
+            "clue": "learn",
+            "clue_num": 2,
+            "guesses": [
+                {
+                    "guess": "school",
+                    "guess_index": 24
+                },
+                {
+                    "guess": "ruler",
+                    "guess_index": 9
+                }
+            ]
+        },
+        {
+            "clue": "madagascar",
+            "clue_num": 1,
+            "guesses": [
+                {
+                    "guess": "beach",
+                    "guess_index": 19
+                },
+                {
+                    "guess": "lion",
+                    "guess_index": 16
+                }
+            ]
+        },
+        {
+            "clue": "button",
+            "clue_num": 3,
+            "guesses": [
+                {
+                    "guess": "spell",
+                    "guess_index": 14
+                },
+                {
+                    "guess": "press",
+                    "guess_index": 15
+                },
+                {
+                    "guess": "knife",
+                    "guess_index": 2
                 }
             ]
         }
