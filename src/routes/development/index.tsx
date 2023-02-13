@@ -1,5 +1,9 @@
-import Table from "~/components/Table/Table";
+import Table from "~/components/Table";
 
-export default async function GameUI(props: any) {
-  return <Table></Table>;
+export default function GameUI(props: any) {
+  return (
+    <>
+      <Table></Table>
+    </>
+  );
 }
