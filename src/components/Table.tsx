@@ -1,30 +1,67 @@
-import { createSignal, For } from "solid-js";
+import { createSignal, For, Switch, Match } from "solid-js";
 import Row from "./Row";
 import StatusBar from "./StatusBar";
-import { fetchGameState, grid } from "../util/GameState";
+import { grid } from "../util/GameState";
+import WebSocket from "isomorphic-ws";
 
 export default function Table(props: any) {
-  const [gameState, setGameState] = createSignal<any>();
-
-  setInterval(async () => {
-    try {
-      const inf = await fetchGameState();
-      setGameState(inf);
-    } catch (e: any) {
-      setGameState(null);
-    }
-  }, 1000);
-
-  const gameStateGrid = () => grid(gameState());
+  const gameStateGrid = () => grid(props.gameState());
+  const [reloading, setReloading] = createSignal(false);
+  const reload = () => {
+    location.reload();
+    setReloading(true);
+  };
 
   return (
     <>
       <h1>Experimental Game UI</h1>
       <div id="game-area">
-        <table>
-          <For each={gameStateGrid()}>{(row) => <Row words={row}></Row>}</For>
-        </table>
-        <StatusBar state={gameState()}></StatusBar>
+        <Switch
+          fallback={
+            <>
+              <div>
+                <b>Disconnected</b>
+              </div>
+              <input
+                type="button"
+                value="Reconnect"
+                onClick={reload}
+                disabled={reloading()}
+              />
+            </>
+          }
+        >
+          <Match when={props.socketState() == WebSocket.OPEN}>
+            <table>
+              <For each={gameStateGrid()}>
+                {(row) => <Row words={row}></Row>}
+              </For>
+            </table>
+          </Match>
+          <Match when={props.socketState() == WebSocket.CONNECTING}>
+            <div>
+              <b>Connecting...</b>
+            </div>
+          </Match>
+          <Match when={props.socketState() == WebSocket.CLOSING}>
+            <div>
+              <b>Disconnecting...</b>
+            </div>
+          </Match>
+          <Match when={props.socketState() == WebSocket.CLOSED}>
+            <>
+              <div>
+                <b>Disconnected</b>
+              </div>
+              <input
+                type="button"
+                value="Reconnect"
+                onClick={reload}
+                disabled={reloading()}
+              />
+            </>
+          </Match>
+        </Switch>
       </div>
     </>
   );
