@@ -19,10 +19,11 @@ export default function Cell(props: any) {
     <td
       style={{
         "background-color": cardTypeToColor(props.color, props.guessed),
+        border: props.guessed ? "none" : "solid 2px #000",
         color: props.guessed ? "#fff" : "#000",
       }}
     >
-      {props.word}
+      {props?.word}
     </td>
   );
 }

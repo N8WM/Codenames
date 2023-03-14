@@ -1,0 +1,9 @@
+#key-table {
+  border-spacing: 3px;
+  border-collapse: separate;
+}
+
+#key-table td {
+  padding: 10px;
+  border-radius: 3px;
+}

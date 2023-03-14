@@ -1,6 +1,9 @@
 import Table from "~/components/Table";
-import { createEffect, createSignal, Match, Show, Switch } from "solid-js";
+import Prompt from "~/components/Prompt";
+import Key from "~/components/Key";
+import { createEffect, createSignal } from "solid-js";
 import WebSocket from "isomorphic-ws";
+import "./index.css";
 
 export default function GameUI(props: any) {
   const [gameState, setGameState] = createSignal<any>();
@@ -13,6 +16,7 @@ export default function GameUI(props: any) {
       board: {
         words: [],
         guessed: [],
+        key: [],
       },
       prompt: null,
       error: null,
@@ -39,6 +43,7 @@ export default function GameUI(props: any) {
   resetBoard();
   createEffect(() => {
     if (state() == WebSocket.CLOSED) resetBoard();
+    if (state() == WebSocket.OPEN) send("Connection established.");
   });
 
   createEffect(() => {
@@ -53,7 +58,12 @@ export default function GameUI(props: any) {
       if (data.hasOwnProperty("board"))
         setGameState((gameState) => {
           let res = { ...gameState };
-          res.board = { ...gameState.board, ...data.board };
+          if (
+            gameState.board.words.length > 0 &&
+            gameState.board.key.length > 0
+          )
+            res.board = { ...gameState.board };
+          else res.board = { ...gameState.board, ...data.board };
           if (
             !gameState.board.hasOwnProperty("guessed") ||
             gameState.board.guessed.length == 0
@@ -65,7 +75,6 @@ export default function GameUI(props: any) {
               }
               return board;
             })();
-          console.log(res.board.guessed);
           return res;
         });
       if (data.hasOwnProperty("prompt"))
@@ -99,38 +108,12 @@ export default function GameUI(props: any) {
 
   return (
     <>
-      <Table socketState={state} gameState={gameState}></Table>
-      <br />
-      <br />
-      <Show
-        when={
-          gameState().hasOwnProperty("prompt") && gameState().prompt != null
-        }
-        fallback={<div></div>}
-      >
-        <div>
-          <div>
-            <b>{gameState().prompt.message}</b>
-          </div>
-          <br />
-          <Switch fallback={<div></div>}>
-            <Match when={gameState().prompt.type === "str"}>
-              <input type="text" id="prompt" />
-              <input
-                type="button"
-                value="Submit"
-                onClick={(e) =>
-                  send((e.target.previousSibling as HTMLInputElement).value)
-                }
-              />
-            </Match>
-            <Match when={gameState().prompt.type === "bool"}>
-              <input type="button" value="Yes" onClick={() => send("true")} />
-              <input type="button" value="No" onClick={() => send("false")} />
-            </Match>
-          </Switch>
-        </div>
-      </Show>
+      <h1>Codenames Arena</h1>
+      <div id="table-container">
+        <Table socketState={state} gameState={gameState}></Table>
+        <Key socketState={state} gameState={gameState}></Key>
+      </div>
+      <Prompt gameState={gameState} send={send}></Prompt>
     </>
   );
 }

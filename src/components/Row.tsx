@@ -7,9 +7,9 @@ export default function Row(props: any) {
       <For each={props.words}>
         {(word: any) => (
           <Cell
-            word={word.word}
+            word={props.isKey ? "" : word.word}
             color={word.color}
-            guessed={word.guessed}
+            guessed={props.isKey ? true : word.guessed}
           ></Cell>
         )}
       </For>
