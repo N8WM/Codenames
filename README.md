@@ -1,30 +1,8 @@
-# SolidStart
+# Codenames AI Competition UI
 
-Everything you need to build a Solid project, powered by [`solid-start`](https://start.solidjs.com);
+#### Note: This project is still in development, and it works hand-in-hand with the [Codenames Server](https://github.com/N8WM/Codenames-Server) repository.
 
-## Creating a project
+This is the UI for the Codenames AI Competition Framework.
 
-```bash
-# create a new project in the current directory
-npm init solid@latest
-
-# create a new project in my-app
-npm init solid@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-Solid apps are built with _adapters_, which optimise your project for deployment to different environments.
-
-By default, `npm run build` will generate a Node app that you can run with `npm start`. To use a different adapter, add it to the `devDependencies` in `package.json` and specify in your `vite.config.js`.
+## Running the UI for the first time
+First clone the repository and run `npm i`. Then, `npm run dev` can be called. To run a game of Codenames with the UI, an instance of `codenames/index.py` from the [Codenames Server](https://github.com/N8WM/Codenames-Server) needs to be running.
