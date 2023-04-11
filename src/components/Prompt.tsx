@@ -29,7 +29,21 @@ export default function Prompt(props: any) {
     >
       <div id="prompt-container">
         <div id="prompt-area">
-          <div id="prompt-message">{props.gameState().prompt.message}</div>
+          <div id="prompt-message">
+            <Switch>
+              <Match
+                when={props.getRole(props.gameState().prompt.message) != null}
+              >
+                <b>{props.getRole(props.gameState().prompt.message)[0]}:</b>
+                {props.getRole(props.gameState().prompt.message)[1]}
+              </Match>
+              <Match
+                when={props.getRole(props.gameState().prompt.message) == null}
+              >
+                {props.gameState().prompt.message}
+              </Match>
+            </Switch>
+          </div>
           <Switch>
             <Match when={props.gameState().prompt.type === "str"}>
               <form

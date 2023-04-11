@@ -3,6 +3,7 @@ import Row from "./Row";
 import { grid } from "../util/GameState";
 import WebSocket from "isomorphic-ws";
 import "./Table.css";
+import { GameStatus } from "~/routes/development/index";
 
 export default function Table(props: any) {
   const gameStateGrid = () => grid(props.gameState());
@@ -10,6 +11,7 @@ export default function Table(props: any) {
   const reload = () => {
     location.reload();
     setReloading(true);
+    props.setGameStatus(GameStatus.Pending);
   };
 
   return (
@@ -28,9 +30,18 @@ export default function Table(props: any) {
         </>
       }
     >
-      <Match when={props.socketState() == WebSocket.OPEN}>
+      <Match
+        when={
+          props.socketState() == WebSocket.OPEN ||
+          props.gameStatus() == GameStatus.Ongoing
+        }
+      >
         <Show
-          when={gameStateGrid().length > 0}
+          when={
+            gameStateGrid().length > 0 ||
+            props.gameStatus() == GameStatus.Won ||
+            props.gameStatus() == GameStatus.Lost
+          }
           fallback={
             <div>
               <b>Loading...</b>
@@ -43,6 +54,28 @@ export default function Table(props: any) {
             </For>
           </table>
         </Show>
+      </Match>
+      <Match when={props.gameStatus() == GameStatus.Lost}>
+        <div>
+          <b>You lost!</b>
+        </div>
+        <input
+          type="button"
+          value="New Game"
+          onClick={reload}
+          disabled={reloading()}
+        />
+      </Match>
+      <Match when={props.gameStatus() == GameStatus.Won}>
+        <div>
+          <b>You won!</b>
+        </div>
+        <input
+          type="button"
+          value="New Game"
+          onClick={reload}
+          disabled={reloading()}
+        />
       </Match>
       <Match when={props.socketState() == WebSocket.CONNECTING}>
         <div>

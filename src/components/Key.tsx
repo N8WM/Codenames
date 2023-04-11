@@ -8,7 +8,9 @@ export default function Key(props: any) {
   const gameStateGrid = () => grid(props.gameState());
 
   return (
-    <Show when={props.socketState() == WebSocket.OPEN}>
+    <Show
+      when={props.socketState() == WebSocket.OPEN && props.humanIsCodemaster()}
+    >
       <table id="key-table">
         <Show when={gameStateGrid().length > 0}>
           <For each={gameStateGrid()}>
