@@ -1,7 +1,12 @@
 import { Match, Show, Switch } from "solid-js";
 import "./Prompt.css";
+import { GameState } from "~/util/store";
+import { getRole } from "~/util/sockets";
 
-export default function Prompt(props: any) {
+export default function Prompt(props: {
+  gameState: GameState;
+  send: (message: string) => void;
+}) {
   let textRef: any;
 
   function respond(event: Event) {
@@ -22,8 +27,8 @@ export default function Prompt(props: any) {
   return (
     <Show
       when={
-        props.gameState().hasOwnProperty("prompt") &&
-        props.gameState().prompt != null
+        props.gameState.hasOwnProperty("prompt") &&
+        props.gameState.prompt != null
       }
       fallback={<div></div>}
     >
@@ -31,21 +36,17 @@ export default function Prompt(props: any) {
         <div id="prompt-area">
           <div id="prompt-message">
             <Switch>
-              <Match
-                when={props.getRole(props.gameState().prompt.message) != null}
-              >
-                <b>{props.getRole(props.gameState().prompt.message)[0]}:</b>
-                {props.getRole(props.gameState().prompt.message)[1]}
+              <Match when={getRole(props.gameState.prompt?.message) != null}>
+                <b>{(getRole(props.gameState.prompt?.message) ?? ["_"])[0]}:</b>
+                {(getRole(props.gameState.prompt?.message) ?? ["", "_"])[1]}
               </Match>
-              <Match
-                when={props.getRole(props.gameState().prompt.message) == null}
-              >
-                {props.gameState().prompt.message}
+              <Match when={getRole(props.gameState.prompt?.message) == null}>
+                {props.gameState.prompt?.message}
               </Match>
             </Switch>
           </div>
           <Switch>
-            <Match when={props.gameState().prompt.type === "str"}>
+            <Match when={props.gameState.prompt?.type === "str"}>
               <form
                 onSubmit={respond}
                 autocomplete="off"
@@ -55,7 +56,7 @@ export default function Prompt(props: any) {
                 <input type="submit" value="Submit" />
               </form>
             </Match>
-            <Match when={props.gameState().prompt.type === "bool"}>
+            <Match when={props.gameState.prompt?.type === "bool"}>
               <div id="prompt-input-area">
                 <input type="button" value="Yes" onClick={respondYes} />
                 <input type="button" value="No" onClick={respondNo} />

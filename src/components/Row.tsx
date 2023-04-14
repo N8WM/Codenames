@@ -1,7 +1,10 @@
 import { For } from "solid-js";
 import Cell from "./Cell";
 
-export default function Row(props: any) {
+export default function Row(props: {
+  words: { word: string; color: string; guessed: boolean }[];
+  isKey: boolean;
+}) {
   return (
     <tr>
       <For each={props.words}>

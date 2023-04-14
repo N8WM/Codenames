@@ -1,15 +1,21 @@
-import { Show, For } from "solid-js";
-import { grid } from "../util/GameState";
+import { Show, For, Accessor } from "solid-js";
 import Row from "./Row";
 import WebSocket from "isomorphic-ws";
 import "./Key.css";
+import { getGrid, GameStatus, GameState } from "~/util/store";
 
-export default function Key(props: any) {
-  const gameStateGrid = () => grid(props.gameState());
+export default function Key(props: {
+  gameState: GameState;
+  humanIsCodemaster: Accessor<boolean>;
+}) {
+  const gameStateGrid = () => getGrid(props.gameState);
 
   return (
     <Show
-      when={props.socketState() == WebSocket.OPEN && props.humanIsCodemaster()}
+      when={
+        props.gameState.status === GameStatus.Ongoing &&
+        props.humanIsCodemaster()
+      }
     >
       <table id="key-table">
         <Show when={gameStateGrid().length > 0}>

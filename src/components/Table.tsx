@@ -1,17 +1,21 @@
-import { createSignal, For, Switch, Match, Show } from "solid-js";
+import { createSignal, For, Switch, Match, Show, Accessor } from "solid-js";
 import Row from "./Row";
-import { grid } from "../util/GameState";
 import WebSocket from "isomorphic-ws";
 import "./Table.css";
-import { GameStatus } from "~/routes/development/index";
+import { GameState, GameStatus, defaultGameState, getGrid } from "~/util/store";
+import { SetStoreFunction } from "solid-js/store";
 
-export default function Table(props: any) {
-  const gameStateGrid = () => grid(props.gameState());
+export default function Table(props: {
+  gameState: GameState;
+  setGameState: SetStoreFunction<GameState>;
+  socketState: Accessor<0 | 2 | 1 | 3>;
+}) {
+  const gameStateGrid = () => getGrid(props.gameState);
   const [reloading, setReloading] = createSignal(false);
   const reload = () => {
     location.reload();
     setReloading(true);
-    props.setGameStatus(GameStatus.Pending);
+    props.setGameState(defaultGameState);
   };
 
   return (
@@ -30,18 +34,9 @@ export default function Table(props: any) {
         </>
       }
     >
-      <Match
-        when={
-          props.socketState() == WebSocket.OPEN ||
-          props.gameStatus() == GameStatus.Ongoing
-        }
-      >
+      <Match when={props.gameState.status === GameStatus.Ongoing}>
         <Show
-          when={
-            gameStateGrid().length > 0 ||
-            props.gameStatus() == GameStatus.Won ||
-            props.gameStatus() == GameStatus.Lost
-          }
+          when={gameStateGrid().length > 0}
           fallback={
             <div>
               <b>Loading...</b>
@@ -55,7 +50,7 @@ export default function Table(props: any) {
           </table>
         </Show>
       </Match>
-      <Match when={props.gameStatus() == GameStatus.Lost}>
+      <Match when={props.gameState.status === GameStatus.Lost}>
         <div>
           <b>You lost!</b>
         </div>
@@ -66,7 +61,7 @@ export default function Table(props: any) {
           disabled={reloading()}
         />
       </Match>
-      <Match when={props.gameStatus() == GameStatus.Won}>
+      <Match when={props.gameState.status === GameStatus.Won}>
         <div>
           <b>You won!</b>
         </div>
@@ -77,28 +72,15 @@ export default function Table(props: any) {
           disabled={reloading()}
         />
       </Match>
-      <Match when={props.socketState() == WebSocket.CONNECTING}>
+      <Match
+        when={
+          props.gameState.status === GameStatus.Pending &&
+          props.socketState() === WebSocket.CONNECTING
+        }
+      >
         <div>
           <b>Connecting...</b>
         </div>
-      </Match>
-      <Match when={props.socketState() == WebSocket.CLOSING}>
-        <div>
-          <b>Disconnecting...</b>
-        </div>
-      </Match>
-      <Match when={props.socketState() == WebSocket.CLOSED}>
-        <>
-          <div>
-            <b>Disconnected</b>
-          </div>
-          <input
-            type="button"
-            value="Reconnect"
-            onClick={reload}
-            disabled={reloading()}
-          />
-        </>
       </Match>
     </Switch>
   );

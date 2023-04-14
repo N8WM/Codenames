@@ -14,7 +14,11 @@ function cardTypeToColor(type: string, guessed: boolean) {
   }
 }
 
-export default function Cell(props: any) {
+export default function Cell(props: {
+  word: string;
+  color: string;
+  guessed: boolean;
+}) {
   return (
     <td
       style={{
