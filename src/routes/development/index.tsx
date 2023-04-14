@@ -14,7 +14,7 @@ import {
 import { getRole } from "~/util/sockets";
 import { createStore } from "solid-js/store";
 
-export default function GameUI(props: any) {
+export default function GameUI() {
   const [gameState, setGameState] = createStore(defaultGameState);
 
   const [message, setMessage] = createSignal("");

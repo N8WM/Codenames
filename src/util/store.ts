@@ -55,9 +55,10 @@ const updateGameStateKV = (
 ) => {
   switch (key) {
     case "guess_success":
-      const _guessed = JSON.parse(JSON.stringify(gameState.board.guessed));
-      _guessed[value] = true;
-      setGameState("board", { guessed: _guessed });
+      setGameState("board", "guessed", (prev) => {
+        prev[value] = true;
+        return [...prev];
+      });
       break;
     case "board":
       if (gameState.board.guessed.length === 0)
@@ -77,7 +78,9 @@ const updateGameStateKV = (
       alert(value);
       break;
     case "game_over":
-      setGameState({ status: value ? GameStatus.Won : GameStatus.Lost });
+      setGameState({
+        status: value === "won" ? GameStatus.Won : GameStatus.Lost,
+      });
       break;
   }
 };
