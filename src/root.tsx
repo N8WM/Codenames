@@ -12,6 +12,7 @@ import {
   Title,
 } from "solid-start";
 import "./root.css";
+import { GameStateProvider } from "./stores/GameState";
 
 export default function Root() {
   return (
@@ -24,9 +25,11 @@ export default function Root() {
       <Body>
         <Suspense>
           <ErrorBoundary>
-            <Routes>
-              <FileRoutes />
-            </Routes>
+            <GameStateProvider>
+              <Routes>
+                <FileRoutes />
+              </Routes>
+            </GameStateProvider>
           </ErrorBoundary>
         </Suspense>
         <Scripts />

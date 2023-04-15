@@ -2,20 +2,20 @@ import { createSignal, For, Switch, Match, Show, Accessor } from "solid-js";
 import Row from "./Row";
 import WebSocket from "isomorphic-ws";
 import "./Table.css";
-import { GameState, GameStatus, defaultGameState, getGrid } from "~/util/store";
-import { SetStoreFunction } from "solid-js/store";
+import { useGameState } from "~/stores/GameState";
+import { GameStatus } from "~/util/prototypes";
 
-export default function Table(props: {
-  gameState: GameState;
-  setGameState: SetStoreFunction<GameState>;
-  socketState: Accessor<0 | 2 | 1 | 3>;
-}) {
-  const gameStateGrid = () => getGrid(props.gameState);
+export default function Table(props: { socketState: Accessor<0 | 2 | 1 | 3> }) {
+  const state = useGameState();
+  if (!state) throw new Error("Store uninitialized");
+  const [gameState, { reset: resetGS, getGrid: getGridGS }] = state;
+
+  const gameStateGrid = () => getGridGS();
   const [reloading, setReloading] = createSignal(false);
   const reload = () => {
     location.reload();
     setReloading(true);
-    props.setGameState(defaultGameState);
+    resetGS();
   };
 
   return (
@@ -34,7 +34,7 @@ export default function Table(props: {
         </>
       }
     >
-      <Match when={props.gameState.status === GameStatus.Ongoing}>
+      <Match when={gameState.status === GameStatus.Ongoing}>
         <Show
           when={gameStateGrid().length > 0}
           fallback={
@@ -50,7 +50,7 @@ export default function Table(props: {
           </table>
         </Show>
       </Match>
-      <Match when={props.gameState.status === GameStatus.Lost}>
+      <Match when={gameState.status === GameStatus.Lost}>
         <div>
           <b>You lost!</b>
         </div>
@@ -61,7 +61,7 @@ export default function Table(props: {
           disabled={reloading()}
         />
       </Match>
-      <Match when={props.gameState.status === GameStatus.Won}>
+      <Match when={gameState.status === GameStatus.Won}>
         <div>
           <b>You won!</b>
         </div>
@@ -74,7 +74,7 @@ export default function Table(props: {
       </Match>
       <Match
         when={
-          props.gameState.status === GameStatus.Pending &&
+          gameState.status === GameStatus.Pending &&
           props.socketState() === WebSocket.CONNECTING
         }
       >

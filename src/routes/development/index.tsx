@@ -4,18 +4,22 @@ import Key from "~/components/Key";
 import { createEffect, createSignal } from "solid-js";
 import WebSocket from "isomorphic-ws";
 import "./index.css";
-import {
-  GameState,
-  GameStatus,
-  defaultGameState,
-  resetGameState,
-  updateGameState,
-} from "~/util/store";
-import { getRole } from "~/util/sockets";
-import { createStore } from "solid-js/store";
+import { getRole } from "~/util/general";
+import { useGameState } from "~/stores/GameState";
+import { GameStatus } from "~/util/prototypes";
 
 export default function GameUI() {
-  const [gameState, setGameState] = createStore(defaultGameState);
+  const state = useGameState();
+  if (!state) throw new Error("Store uninitialized");
+  const [
+    gameState,
+    {
+      reset: resetGS,
+      update: updateGS,
+      setStatus: setStatusGS,
+      getGrid: getGridGS,
+    },
+  ] = state;
 
   const [message, setMessage] = createSignal("");
   const socket = new WebSocket("ws://localhost:8001/");
@@ -51,17 +55,17 @@ export default function GameUI() {
       socketState() === WebSocket.CLOSED &&
       gameState.status !== GameStatus.Pending
     )
-      resetGameState(setGameState);
+      resetGS();
     if (socketState() === WebSocket.OPEN) {
       startGame();
-      setGameState({ status: GameStatus.Ongoing });
+      setStatusGS(GameStatus.Ongoing);
     }
   });
 
   createEffect(() => {
     if (message() === "") return;
     const data: any = JSON.parse(message());
-    updateGameState(gameState, setGameState, data);
+    updateGS(data);
   });
 
   createEffect(() => {
@@ -75,14 +79,10 @@ export default function GameUI() {
     <>
       <h1>Codenames Arena</h1>
       <div id="table-container">
-        <Table
-          socketState={socketState}
-          gameState={gameState}
-          setGameState={setGameState}
-        ></Table>
-        <Key gameState={gameState} humanIsCodemaster={humanIsCodemaster}></Key>
+        <Table socketState={socketState}></Table>
+        <Key humanIsCodemaster={humanIsCodemaster}></Key>
       </div>
-      <Prompt gameState={gameState} send={send}></Prompt>
+      <Prompt send={send}></Prompt>
     </>
   );
 }

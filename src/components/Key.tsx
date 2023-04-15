@@ -1,20 +1,19 @@
 import { Show, For, Accessor } from "solid-js";
 import Row from "./Row";
-import WebSocket from "isomorphic-ws";
 import "./Key.css";
-import { getGrid, GameStatus, GameState } from "~/util/store";
+import { useGameState } from "~/stores/GameState";
+import { GameStatus } from "~/util/prototypes";
 
-export default function Key(props: {
-  gameState: GameState;
-  humanIsCodemaster: Accessor<boolean>;
-}) {
-  const gameStateGrid = () => getGrid(props.gameState);
+export default function Key(props: { humanIsCodemaster: Accessor<boolean> }) {
+  const state = useGameState();
+  if (!state) throw new Error("Store uninitialized");
+  const [gameState, { getGrid: getGridGS }] = state;
+  const gameStateGrid = () => getGridGS();
 
   return (
     <Show
       when={
-        props.gameState.status === GameStatus.Ongoing &&
-        props.humanIsCodemaster()
+        gameState.status === GameStatus.Ongoing && props.humanIsCodemaster()
       }
     >
       <table id="key-table">
