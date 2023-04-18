@@ -14,12 +14,7 @@ export default function GameUI() {
   if (!state) throw new Error("Store uninitialized");
   const [
     gameState,
-    {
-      reset: resetGS,
-      update: updateGS,
-      setStatus: setStatusGS,
-      getGrid: getGridGS,
-    },
+    { reset: resetGS, update: updateGS, setStatus: setStatusGS },
   ] = state;
 
   const [message, setMessage] = createSignal("");
