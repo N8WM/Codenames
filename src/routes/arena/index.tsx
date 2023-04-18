@@ -1,12 +1,13 @@
 import Table from "~/components/Table";
 import Prompt from "~/components/Prompt";
 import Key from "~/components/Key";
-import { createEffect, createSignal } from "solid-js";
+import { Show, createEffect, createSignal } from "solid-js";
 import WebSocket from "isomorphic-ws";
 import "./index.css";
 import { getRole } from "~/util/general";
 import { useGameState } from "~/stores/GameState";
 import { GameStatus } from "~/util/prototypes";
+import { Title } from "solid-start";
 
 export default function GameUI() {
   const state = useGameState();
@@ -76,13 +77,18 @@ export default function GameUI() {
   });
 
   return (
-    <>
+    <main>
+      <Title>Arena</Title>
       <h1>Codenames Arena</h1>
-      <div id="table-container">
+      <div class="container mb-4">
         <Table socketState={socketState}></Table>
-        <Key humanIsCodemaster={humanIsCodemaster}></Key>
+        <div class="row align-items-center justify-content-center gap-4">
+          <Key humanIsCodemaster={humanIsCodemaster}></Key>
+          <div class="col mx-auto">
+            <Prompt send={send}></Prompt>
+          </div>
+        </div>
       </div>
-      <Prompt send={send}></Prompt>
-    </>
+    </main>
   );
 }

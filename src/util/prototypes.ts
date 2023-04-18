@@ -29,6 +29,7 @@ export type GameStateStore = [
     reset(): void;
     update(data: any): void;
     setStatus(status: GameStatus): void;
+    clearPrompt(): void;
     getGrid(): { word: string; color: string; guessed: boolean }[][];
   }
 ];

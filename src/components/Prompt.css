@@ -1,30 +1,4 @@
-#prompt-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#prompt-area {
-  display: inline-flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-  max-width: calc(100% - 4rem);
-  padding: 1rem;
-  background-color: #eee;
-  border-radius: 10px;
-}
-
-#prompt-message {
-  display: inline-block;
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-}
-
-#prompt-input-area {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: center;
-  max-width: 100%;
+#prompt {
+  max-width: 30rem;
+  min-width: 20rem;
 }

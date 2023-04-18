@@ -1,5 +1,6 @@
 import { createSignal, For, Switch, Match, Show, Accessor } from "solid-js";
 import Row from "./Row";
+import Loading from "./Loading";
 import WebSocket from "isomorphic-ws";
 import "./Table.css";
 import { useGameState } from "~/stores/GameState";
@@ -19,69 +20,72 @@ export default function Table(props: { socketState: Accessor<0 | 2 | 1 | 3> }) {
   };
 
   return (
-    <Switch
-      fallback={
-        <>
-          <div>
-            <b>Disconnected</b>
-          </div>
-          <input
-            type="button"
-            value="Reconnect"
-            onClick={reload}
-            disabled={reloading()}
-          />
-        </>
-      }
-    >
-      <Match when={gameState.status === GameStatus.Ongoing}>
-        <Show
-          when={gameStateGrid().length > 0}
-          fallback={
+    <div class="mb-4">
+      <Switch
+        fallback={
+          <div class="text-center">
             <div>
-              <b>Loading...</b>
+              <b>Disconnected</b>
             </div>
-          }
-        >
-          <table id="card-table">
-            <For each={gameStateGrid()}>
-              {(row) => <Row words={row} isKey={false}></Row>}
-            </For>
-          </table>
-        </Show>
-      </Match>
-      <Match when={gameState.status === GameStatus.Lost}>
-        <div>
-          <b>You lost!</b>
-        </div>
-        <input
-          type="button"
-          value="New Game"
-          onClick={reload}
-          disabled={reloading()}
-        />
-      </Match>
-      <Match when={gameState.status === GameStatus.Won}>
-        <div>
-          <b>You won!</b>
-        </div>
-        <input
-          type="button"
-          value="New Game"
-          onClick={reload}
-          disabled={reloading()}
-        />
-      </Match>
-      <Match
-        when={
-          gameState.status === GameStatus.Pending &&
-          props.socketState() === WebSocket.CONNECTING
+            <input
+              type="button"
+              value="Reconnect"
+              class="btn btn-outline-primary"
+              onClick={reload}
+              disabled={reloading()}
+            />
+          </div>
         }
       >
-        <div>
-          <b>Connecting...</b>
-        </div>
-      </Match>
-    </Switch>
+        <Match when={gameState.status === GameStatus.Ongoing}>
+          <Show
+            when={gameStateGrid().length > 0}
+            fallback={<Loading></Loading>}
+          >
+            <div class="container">
+              <For each={gameStateGrid()}>
+                {(row) => <Row words={row} isKey={false}></Row>}
+              </For>
+            </div>
+          </Show>
+        </Match>
+        <Match when={gameState.status === GameStatus.Lost}>
+          <div class="text-center">
+            <div>
+              <b>You lost!</b>
+            </div>
+            <input
+              type="button"
+              value="New Game"
+              class="btn btn-outline-primary"
+              onClick={reload}
+              disabled={reloading()}
+            />
+          </div>
+        </Match>
+        <Match when={gameState.status === GameStatus.Won}>
+          <div class="text-center">
+            <div>
+              <b>You won!</b>
+            </div>
+            <input
+              type="button"
+              value="New Game"
+              class="btn btn-outline-primary"
+              onClick={reload}
+              disabled={reloading()}
+            />
+          </div>
+        </Match>
+        <Match
+          when={
+            gameState.status === GameStatus.Pending &&
+            props.socketState() === WebSocket.CONNECTING
+          }
+        >
+          <Loading text="Connecting..."></Loading>
+        </Match>
+      </Switch>
+    </div>
   );
 }

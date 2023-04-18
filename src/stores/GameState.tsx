@@ -28,6 +28,9 @@ export function GameStateProvider(props: {
       setStatus(status: GameStatus) {
         setState({ status });
       },
+      clearPrompt() {
+        setState({ prompt: null });
+      },
       getGrid() {
         const words = state.board.words;
         const key = state.board.key;

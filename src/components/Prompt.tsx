@@ -2,67 +2,103 @@ import { Match, Show, Switch } from "solid-js";
 import "./Prompt.css";
 import { getRole } from "~/util/general";
 import { useGameState } from "~/stores/GameState";
+import Loading from "./Loading";
+import { GameStatus } from "~/util/prototypes";
 
 export default function Prompt(props: { send: (message: string) => void }) {
   const state = useGameState();
   if (!state) throw new Error("Store uninitialized");
-  const [gameState] = state;
+  const [gameState, { clearPrompt: clearPromptGS }] = state;
 
   let textRef: any;
 
   function respond(event: Event) {
     event.preventDefault();
+    clearPromptGS();
     props.send(textRef.value);
   }
 
   function respondYes(event: Event) {
     event.preventDefault();
+    clearPromptGS();
     props.send("true");
   }
 
   function respondNo(event: Event) {
     event.preventDefault();
+    clearPromptGS();
     props.send("false");
   }
 
   return (
     <Show
-      when={gameState.hasOwnProperty("prompt") && gameState.prompt != null}
-      fallback={<div></div>}
+      when={
+        gameState.status === GameStatus.Ongoing &&
+        gameState.board.words.length > 0
+      }
     >
-      <div id="prompt-container">
-        <div id="prompt-area">
-          <div id="prompt-message">
+      <Show
+        when={gameState.hasOwnProperty("prompt") && gameState.prompt != null}
+        fallback={<Loading text="Thinking..."></Loading>}
+      >
+        <div
+          class="card text-center mx-auto shadow bg-body border-0"
+          id="prompt"
+        >
+          <div class="card-body">
             <Switch>
               <Match when={getRole(gameState.prompt?.message) != null}>
-                <b>{(getRole(gameState.prompt?.message) ?? ["_"])[0]}:</b>
-                {(getRole(gameState.prompt?.message) ?? ["", "_"])[1]}
+                <h5 class="card-title mb-2">
+                  {(getRole(gameState.prompt?.message) ?? ["_"])[0]}
+                </h5>
+                <p class="card-text">
+                  {(getRole(gameState.prompt?.message) ?? ["", "_"])[1]}
+                </p>
               </Match>
               <Match when={getRole(gameState.prompt?.message) == null}>
-                {gameState.prompt?.message}
+                <p class="card-text">{gameState.prompt?.message}</p>
+              </Match>
+            </Switch>
+            <Switch>
+              <Match when={gameState.prompt?.type === "str"}>
+                <form onSubmit={respond} autocomplete="off">
+                  <div class="input-group mb-3 mx-auto">
+                    <input
+                      type="text"
+                      class="form-control"
+                      aria-label="input-text"
+                      aria-describedby="button-addon"
+                      ref={textRef}
+                    />
+                    <input
+                      type="submit"
+                      class="btn btn-secondary"
+                      id="button-addon"
+                      value="Submit"
+                    />
+                  </div>
+                </form>
+              </Match>
+              <Match when={gameState.prompt?.type === "bool"}>
+                <div class="btn-group mx-auto">
+                  <input
+                    type="button"
+                    class="btn border-end-0 btn-outline-primary"
+                    value="Yes"
+                    onClick={respondYes}
+                  />
+                  <input
+                    type="button"
+                    class="btn btn-outline-primary"
+                    value="No"
+                    onClick={respondNo}
+                  />
+                </div>
               </Match>
             </Switch>
           </div>
-          <Switch>
-            <Match when={gameState.prompt?.type === "str"}>
-              <form
-                onSubmit={respond}
-                autocomplete="off"
-                id="prompt-input-area"
-              >
-                <input type="text" id="prompt" ref={textRef} />
-                <input type="submit" value="Submit" />
-              </form>
-            </Match>
-            <Match when={gameState.prompt?.type === "bool"}>
-              <div id="prompt-input-area">
-                <input type="button" value="Yes" onClick={respondYes} />
-                <input type="button" value="No" onClick={respondNo} />
-              </div>
-            </Match>
-          </Switch>
         </div>
-      </div>
+      </Show>
     </Show>
   );
 }

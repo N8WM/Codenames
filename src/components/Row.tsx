@@ -6,16 +6,16 @@ export default function Row(props: {
   isKey: boolean;
 }) {
   return (
-    <tr>
+    <div class={`row row-cols-${props.isKey ? "auto" : "5"}`}>
       <For each={props.words}>
         {(word: any) => (
           <Cell
-            word={props.isKey ? "" : word.word}
+            word={props.isKey ? "" : word.word.toLowerCase()}
             color={word.color}
             guessed={props.isKey ? true : word.guessed}
           ></Cell>
         )}
       </For>
-    </tr>
+    </div>
   );
 }

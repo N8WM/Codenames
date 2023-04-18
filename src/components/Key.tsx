@@ -1,8 +1,8 @@
 import { Show, For, Accessor } from "solid-js";
-import Row from "./Row";
 import "./Key.css";
 import { useGameState } from "~/stores/GameState";
 import { GameStatus } from "~/util/prototypes";
+import { cardTypeToColor } from "~/util/general";
 
 export default function Key(props: { humanIsCodemaster: Accessor<boolean> }) {
   const state = useGameState();
@@ -13,16 +13,28 @@ export default function Key(props: { humanIsCodemaster: Accessor<boolean> }) {
   return (
     <Show
       when={
-        gameState.status === GameStatus.Ongoing && props.humanIsCodemaster()
+        gameState.status === GameStatus.Ongoing &&
+        props.humanIsCodemaster() &&
+        gameStateGrid().length > 0
       }
     >
-      <table id="key-table">
-        <Show when={gameStateGrid().length > 0}>
-          <For each={gameStateGrid()}>
-            {(row) => <Row words={row} isKey={true}></Row>}
-          </For>
-        </Show>
-      </table>
+      <div class="col mx-auto">
+        <div class="card text-center border-0 shadow mx-auto" id="key-card">
+          <div class="card-body">
+            <div id="key-grid" class="d-grid mx-auto">
+              <For each={gameState.board.key}>
+                {(color) => (
+                  <div
+                    class="rounded"
+                    id="key-cell"
+                    style={`background-color: ${cardTypeToColor(color, true)}`}
+                  ></div>
+                )}
+              </For>
+            </div>
+          </div>
+        </div>
+      </div>
     </Show>
   );
 }
