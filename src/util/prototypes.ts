@@ -19,6 +19,7 @@ export type Prompt = {
 export type GameState = {
   board: Board;
   prompt: Prompt | null;
+  guesses_left: number;
   error: string | null;
   status: GameStatus;
 };
@@ -37,6 +38,7 @@ export type GameStateStore = [
 export const defaultGameState: GameState = {
   board: { words: [], guessed: [], key: [] },
   prompt: null,
+  guesses_left: 0,
   error: null,
   status: GameStatus.Pending,
 };

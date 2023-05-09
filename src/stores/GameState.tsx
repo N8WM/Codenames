@@ -75,6 +75,9 @@ export function GameStateProvider(props: {
       case "prompt":
         setState({ prompt: value });
         break;
+      case "guesses_left":
+        setState({ guesses_left: value });
+        break;
       case "error":
         setState({ error: value });
         alert(value);

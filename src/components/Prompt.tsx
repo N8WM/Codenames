@@ -48,9 +48,16 @@ export default function Prompt(props: { send: (message: string) => void }) {
           <div class="card-body">
             <Switch>
               <Match when={getRole(gameState.prompt?.message) != null}>
-                <h5 class="card-title mb-2">
+                <h5 class="card-title">
                   {(getRole(gameState.prompt?.message) ?? ["_"])[0]}
                 </h5>
+                <Show when={gameState.guesses_left > 0}>
+                  <h6 class="card-subtitle mb-2 text-muted">
+                    {gameState.guesses_left} guess
+                    {gameState.guesses_left > 1 ? "es" : ""} left (you get one
+                    extra)
+                  </h6>
+                </Show>
                 <p class="card-text">
                   {(getRole(gameState.prompt?.message) ?? ["", "_"])[1]}
                 </p>
